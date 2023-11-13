@@ -5,7 +5,6 @@
 
 ## Features
 - **Automated Version Management:** Based on commit messages, automatically manage versions.
-- **Customizable Configuration:** Tailor the module to fit different project needs.
 - **Simplified Setup:** Easy to integrate and reduces setup complexity.
 - **Standardized Process:** Ensures a consistent release workflow.
 
