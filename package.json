@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/open4business/semantic-versioning/issues"
   },
-  "homepage": "https://github.com/open4business/semantic-versioning#readme"
+  "homepage": "https://github.com/open4business/semantic-versioning#readme",
+  "devDependencies": {
+    "@open4business/commit-rules": "^0.0.3"
+  }
 }
