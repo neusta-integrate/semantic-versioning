@@ -1,21 +1,9 @@
 {
-  "name": "@open4business/semantic-versioning",
-  "version": "0.0.0",
-  "description": "A comprehensive semantic versioning module designed to automate and streamline the release process across multiple projects. This module integrates seamlessly with 'semantic-release' and its plugins, providing a unified and customizable configuration for versioning, changelog generation, and publishing. It simplifies the setup for semantic version management, ensuring consistent versioning practices and reducing setup complexity in individual projects. Ideal for teams seeking a standardized, automated release workflow.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/open4business/semantic-versioning.git"
-  },
   "author": "Mark Emrich",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/open4business/semantic-versioning/issues"
   },
-  "homepage": "https://github.com/open4business/semantic-versioning#readme",
+  "description": "A comprehensive semantic versioning module designed to automate and streamline the release process across multiple projects. This module integrates seamlessly with 'semantic-release' and its plugins, providing a unified and customizable configuration for versioning, changelog generation, and publishing. It simplifies the setup for semantic version management, ensuring consistent versioning practices and reducing setup complexity in individual projects. Ideal for teams seeking a standardized, automated release workflow.",
   "devDependencies": {
     "@open4business/commit-rules": "^0.0.3",
     "@semantic-release/commit-analyzer": "^11.1.0",
@@ -23,5 +11,17 @@
     "@semantic-release/npm": "^11.0.1",
     "@semantic-release/release-notes-generator": "^12.1.0",
     "semantic-release": "^22.0.7"
-  }
+  },
+  "homepage": "https://github.com/open4business/semantic-versioning#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "name": "@open4business/semantic-versioning",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/open4business/semantic-versioning.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.0.0"
 }
