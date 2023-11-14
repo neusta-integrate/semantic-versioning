@@ -24,4 +24,4 @@ jobs:
       run: npx semantic-release
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        NPM_TOKEN: ${{ secrets.NPM_MARK }}
+        NPM_TOKEN: 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
