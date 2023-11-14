@@ -33,6 +33,6 @@ jobs:
 
     - name: Run semantic-release
       env:
-        GH_TOKEN: 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
-        NODE_AUTH_TOKEN: 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
+        GH_TOKEN: ${{ secrets.O4B_GITHUB_ACTIONS }}
+        NODE_AUTH_TOKEN: ${{ secrets.O4B_GITHUB_ACTIONS }}
       run: npx semantic-release
