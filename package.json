@@ -1,20 +1,18 @@
 {
   "author": "Mark Emrich",
   "bugs": {
-    "url": "https://github.com/maeo4b/o4b-semantic-versioning/issues"
+    "url": "https://github.com/open4business/semantic-versioning/issues"
   },
   "description": "A comprehensive semantic versioning module designed to automate and streamline the release process across multiple projects. This module integrates seamlessly with 'semantic-release' and its plugins, providing a unified and customizable configuration for versioning, changelog generation, and publishing. It simplifies the setup for semantic version management, ensuring consistent versioning practices and reducing setup complexity in individual projects. Ideal for teams seeking a standardized, automated release workflow.",
   "devDependencies": {
     "@open4business/commit-rules": "^0.0.3"
   },
-  "homepage": "https://github.com/maeo4b/o4b-semantic-versioning#readme",
+  "homepage": "https://github.com/open4business/semantic-versioning#readme",
   "license": "ISC",
-  "main": "index.js",
-  "name": "o4b-semantic-versioning",
+  "name": "@open4business/semantic-versioning",
   "peerDependencies": {
     "@semantic-release/commit-analyzer": "^11.1.0",
     "@semantic-release/github": "^9.2.3",
-    "@semantic-release/npm": "^11.0.1",
     "@semantic-release/release-notes-generator": "^12.1.0",
     "semantic-release": "^22.0.7"
   },
@@ -23,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/maeo4b/o4b-semantic-versioning.git"
+    "url": "git+https://github.com/open4business/semantic-versioning.git"
   },
   "scripts": {
     "publish-npm": "npm publish"
