@@ -9,7 +9,6 @@
   },
   "homepage": "https://github.com/open4business/semantic-versioning#readme",
   "license": "ISC",
-  "main": "index.js",
   "name": "@open4business/semantic-versioning",
   "peerDependencies": {
     "@semantic-release/commit-analyzer": "^11.1.0",
@@ -17,6 +16,9 @@
     "@semantic-release/npm": "^11.0.1",
     "@semantic-release/release-notes-generator": "^12.1.0",
     "semantic-release": "^22.0.7"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",
