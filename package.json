@@ -10,7 +10,7 @@
   "homepage": "https://github.com/maeo4b/o4b-semantic-versioning#readme",
   "license": "ISC",
   "main": "index.js",
-  "name": "@maeo4b/o4b-semantic-versioning",
+  "name": "o4b-semantic-versioning",
   "peerDependencies": {
     "@semantic-release/commit-analyzer": "^11.1.0",
     "@semantic-release/github": "^9.2.3",
