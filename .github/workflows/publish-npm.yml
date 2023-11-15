@@ -41,7 +41,14 @@ jobs:
         git add package.json
         git commit -m "chore: update version to $VERSION"
         git push
+    - name: Store the last commit SHA
+      run: echo "LAST_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
     - name: Semantic Release
       run: npx semantic-release
     - name: Publish
       run: npm run publish-release
+    - name: Revert last commit if failure
+      if: failure()
+      run: |
+        git revert --no-edit ${{ env.LAST_COMMIT_SHA }}
+        git push origin HEAD:${{ github.ref }}
