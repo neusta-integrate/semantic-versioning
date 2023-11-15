@@ -5,20 +5,12 @@ on:
     branches:
       - main
 
-permissions:
-  contents: read # for checkout
-      
 jobs:
   release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # to be able to publish add GitHub release
-      issues: write # to be able to comment on released issues
-      pull-requests: write # to be able to comment on released pull requests
-      id-token: write # to enable use of OIDC for npm provenance
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -34,12 +26,44 @@ jobs:
       run: |
         VERSION=$(npx semantic-release --dry-run | grep 'The next release version is' | sed 's/.*is //')
         jq '.version="'$VERSION'"' package.json > temp.json && mv temp.json package.json
-    - name: Commit package.json
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+    - name: Commit update version
+      if: success()
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add package.json
         git commit -m "chore: update version to $VERSION"
-        git push
+        git push -f
+        echo "LAST_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+        echo "IS_VERSION_UPDATE_COMMIT_COMLETED=true" >> $GITHUB_ENV
     - name: Semantic Release
-      run: npx semantic-release
+      if: success()
+      run: |
+        npx semantic-release
+        echo "IS_SEMANTIC_RELEASE_COMLETED=true" >> $GITHUB_ENV
+    - name: Publish
+      if: success()
+      run: |
+        npm run publish-release
+        echo "IS_PUBLISH_COMLETED=true" >> $GITHUB_ENV
+    - name: Revert "Publish" on failure
+      if: failure() && env.IS_PUBLISH_COMLETED
+      run: |
+        RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.VERSION }}" \
+          | jq -r '.id')
+        if [ "$RELEASE_ID" != "null" ]; then
+          curl -s -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID"
+        fi
+    - name: Revert "Semantic Release" on failure
+      if: failure() && env.IS_SEMANTIC_RELEASE_COMLETED
+      run: |
+        git push --delete origin v${{ env.VERSION }}
+        git tag -d v${{ env.VERSION }}
+    - name: Revert "Commit update version" on failure
+      if: failure() && env.IS_VERSION_UPDATE_COMMIT_COMLETED
+      run: |
+        git reset --hard ${{ env.LAST_COMMIT_SHA }}^
+        git push origin HEAD:${{ github.ref }} --force
