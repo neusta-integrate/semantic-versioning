@@ -39,13 +39,27 @@ jobs:
         git add package.json
         git commit -m "chore: update version to $VERSION"
         git push
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
         echo "LAST_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
     - name: Semantic Release
       run: npx semantic-release
     - name: Publish
       run: npm run publish-release
+    - name: Revert last semantic-release on failure
+      if: failure()
+      run: |
+        run: |
+          RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.VERSION }}" \
+            | jq -r '.id')
+          if [ "$RELEASE_ID" != "null" ]; then
+            curl -s -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID"
+          fi
+          git push --delete origin ${{ env.VERSION }}
+          git tag -d ${{ env.VERSION }}
     - name: Revert last commit on failure
       if: failure()
       run: |
-        git revert --no-edit ${{ env.LAST_COMMIT_SHA }}
-        git push origin HEAD:${{ github.ref }}
+        git reset --hard HEAD
+        git push origin HEAD:${{ github.ref }} --force
