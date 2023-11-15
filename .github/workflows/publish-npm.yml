@@ -50,11 +50,6 @@ jobs:
     - name: Revert "Publish" on failure
       if: failure() && env.IS_PUBLISH_COMLETED
       run: |
-        git push --delete origin v${{ env.VERSION }}
-        git tag -d v${{ env.VERSION }}
-    - name: Revert "Semantic Release" on failure
-      if: failure() && env.IS_SEMANTIC_RELEASE_COMLETED
-      run: |
         RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.VERSION }}" \
           | jq -r '.id')
@@ -62,6 +57,11 @@ jobs:
           curl -s -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID"
         fi
+    - name: Revert "Semantic Release" on failure
+      if: failure() && env.IS_SEMANTIC_RELEASE_COMLETED
+      run: |
+        git push --delete origin v${{ env.VERSION }}
+        git tag -d v${{ env.VERSION }}
     - name: Revert "Commit update version" on failure
       if: failure() && env.IS_VERSION_UPDATE_COMMIT_COMLETED
       run: |
