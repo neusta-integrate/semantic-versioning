@@ -66,5 +66,5 @@ jobs:
     - name: Revert "Commit update version" on failure
       if: failure() && env.IS_VERSION_UPDATE_COMMIT_COMLETED
       run: |
-        git revert --no-edit ${{ env.LAST_COMMIT_SHA }}
+        git reset --hard ${{ env.LAST_COMMIT_SHA }}^
         git push origin HEAD:${{ github.ref }} --force
