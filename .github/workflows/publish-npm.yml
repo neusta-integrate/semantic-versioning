@@ -28,6 +28,7 @@ jobs:
         jq '.version="'$VERSION'"' package.json > temp.json && mv temp.json package.json
         echo "VERSION=$VERSION" >> $GITHUB_ENV
     - name: Commit update version
+      if: success()
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
@@ -36,8 +37,10 @@ jobs:
         git push
         echo "LAST_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
     - name: Semantic Release
+      if: success()
       run: npx semantic-release
     - name: Publish
+      if: success()
       run: npm run publish-release
     - name: Revert "Semantic Release" on failure
       if: failure()
