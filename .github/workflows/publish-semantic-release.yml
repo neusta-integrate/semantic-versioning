@@ -24,7 +24,6 @@ jobs:
     - name: Install dependencies
       run: npm clean-install
     - name: Semantic Release
-      if: success()
       run: |
         npx semantic-release
         echo "IS_SEMANTIC_RELEASE_COMLETED=true" >> $GITHUB_ENV
