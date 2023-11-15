@@ -39,7 +39,7 @@ jobs:
           echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
 
       - name: Commit update version
-        if: steps.new-version.outputs.version != steps.current-version.outputs.version
+        if: env.NEW_VERSION != env.CURRENT_VERSION
         run: |
           jq '.version="'$VERSION'"' package.json > temp.json && mv temp.json package.json
           git config --local user.email "action@github.com"
