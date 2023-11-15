@@ -1,9 +1,10 @@
 name: Publish Semantic Release
 
 on:
-  push:
+  pull_request:
     branches:
       - main
+    types: [closed]
 
 jobs:
   release:
@@ -22,21 +23,6 @@ jobs:
         node-version: '20'
     - name: Install dependencies
       run: npm clean-install
-    - name: Run commit analyzer and update package.json
-      run: |
-        VERSION=$(npx semantic-release --dry-run | grep 'The next release version is' | sed 's/.*is //')
-        jq '.version="'$VERSION'"' package.json > temp.json && mv temp.json package.json
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
-    - name: Commit update version
-      if: success()
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add package.json
-        git commit -m "chore: update version to $VERSION"
-        git push -f
-        echo "LAST_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
-        echo "IS_VERSION_UPDATE_COMMIT_COMLETED=true" >> $GITHUB_ENV
     - name: Semantic Release
       if: success()
       run: |
@@ -62,8 +48,3 @@ jobs:
       run: |
         git push --delete origin v${{ env.VERSION }}
         git tag -d v${{ env.VERSION }}
-    - name: Revert "Commit update version" on failure
-      if: failure() && env.IS_VERSION_UPDATE_COMMIT_COMLETED
-      run: |
-        git reset --hard ${{ env.LAST_COMMIT_SHA }}^
-        git push origin HEAD:${{ github.ref }} --force
