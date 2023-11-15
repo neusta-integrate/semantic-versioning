@@ -43,3 +43,5 @@ jobs:
         git push
     - name: Semantic Release
       run: npx semantic-release
+    - name: Publish
+      run: npm run publish-release

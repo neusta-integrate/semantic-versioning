@@ -24,7 +24,7 @@
     "url": "git+https://github.com/open4business/semantic-versioning.git"
   },
   "scripts": {
-    "publish-npm": "npm publish"
+    "publish-release": "npm publish"
   },
   "version": "1.2.0"
 }
