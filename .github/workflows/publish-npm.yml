@@ -36,14 +36,24 @@ jobs:
         git commit -m "chore: update version to $VERSION"
         git push
         echo "LAST_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+        echo "IS_VERSION_UPDATE_COMMIT_COMLETED=true" >> $GITHUB_ENV
     - name: Semantic Release
       if: success()
-      run: npx semantic-release
+      run: |
+        npx semantic-release
+        echo "IS_SEMANTIC_RELEASE_COMLETED=true" >> $GITHUB_ENV
     - name: Publish
       if: success()
-      run: npm run publish-release
+      run: |
+        npm run publish-release
+        echo "IS_PUBLISH_COMLETED=true" >> $GITHUB_ENV
+    - name: Revert "Publish" on failure
+      if: failure() && env.IS_PUBLISH_COMLETED
+      run: |
+        git push --delete origin v${{ env.VERSION }}
+        git tag -d v${{ env.VERSION }}
     - name: Revert "Semantic Release" on failure
-      if: failure()
+      if: failure() && env.IS_SEMANTIC_RELEASE_COMLETED
       run: |
         RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.VERSION }}" \
@@ -52,10 +62,8 @@ jobs:
           curl -s -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID"
         fi
-        git push --delete origin v${{ env.VERSION }}
-        git tag -d v${{ env.VERSION }}
     - name: Revert "Commit update version" on failure
-      if: failure()
+      if: failure() && env.IS_VERSION_UPDATE_COMMIT_COMLETED
       run: |
-        git reset --hard ${{ env.INITIAL_SHA }}
+        git revert --no-edit ${{ env.LAST_COMMIT_SHA }}
         git push origin HEAD:${{ github.ref }} --force
