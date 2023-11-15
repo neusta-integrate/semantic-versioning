@@ -30,22 +30,24 @@ jobs:
         node-version: '20'
     - name: Install dependencies
       run: npm clean-install
-    - name: Run commit analyzer and update commit package.json
+    - name: Run commit analyzer and update package.json
       run: |
         VERSION=$(npx semantic-release --dry-run | grep 'The next release version is' | sed 's/.*is //')
         jq '.version="'$VERSION'"' package.json > temp.json && mv temp.json package.json
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+    - name: Commit update version
+      run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add package.json
         git commit -m "chore: update version to $VERSION"
         git push
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
         echo "LAST_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
     - name: Semantic Release
       run: npx semantic-release
     - name: Publish
       run: npm run publish-release
-    - name: Revert last semantic-release on failure
+    - name: Revert "Semantic Release" on failure
       if: failure()
       run: |
         run: |
@@ -58,8 +60,8 @@ jobs:
           fi
           git push --delete origin ${{ env.VERSION }}
           git tag -d ${{ env.VERSION }}
-    - name: Revert last commit on failure
+    - name: Revert "Commit update version" on failure
       if: failure()
       run: |
-        git reset --hard HEAD
+        git reset --hard ${{ env.INITIAL_SHA }}
         git push origin HEAD:${{ github.ref }} --force
