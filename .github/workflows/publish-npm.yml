@@ -24,7 +24,6 @@ jobs:
       run: npm clean-install
     - name: Run commit analyzer and update package.json
       run: |
-        npx semantic-release --dry-run
         VERSION=$(npx semantic-release --dry-run | grep 'The next release version is' | sed 's/.*is //')
         jq '.version="'$VERSION'"' package.json > temp.json && mv temp.json package.json
         echo "VERSION=$VERSION" >> $GITHUB_ENV
