@@ -30,13 +30,13 @@ jobs:
           npx semantic-release --dry-run
           NEW_VERSION=$(npx semantic-release --dry-run | grep 'The next release version is' | sed 's/.*is //')
           echo "New version number: $NEW_VERSION"
-          echo "NEW_VERSION=$(NEW_VERSION)" >> $GITHUB_ENV
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
       - name: Read the current version number
         run: |
           CURRENT_VERSION=$(jq -r '.version' package.json)
           echo "Current version number: $CURRENT_VERSION"
-          echo "CURRENT_VERSION=$(CURRENT_VERSION)" >> $GITHUB_ENV
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
 
       - name: Commit update version
         if: steps.new-version.outputs.version != steps.current-version.outputs.version
