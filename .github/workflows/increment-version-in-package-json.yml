@@ -7,7 +7,7 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  release:
+  update-feature-branch-version:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -16,7 +16,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0
+        ref: ${{ github.head_ref }}
     - name: Set up Node.js 20
       uses: actions/setup-node@v3
       with:
@@ -35,7 +35,7 @@ jobs:
         git config --local user.name "GitHub Action"
         git add package.json
         git commit -m "chore: update version to $VERSION"
-        git push -f
+        git push origin HEAD:${{ github.head_ref }}
         echo "LAST_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
         echo "IS_VERSION_UPDATE_COMMIT_COMLETED=true" >> $GITHUB_ENV
     - name: Revert "Commit update version" on failure
