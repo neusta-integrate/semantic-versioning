@@ -1,9 +1,9 @@
+const path = require("path");
 const scriptDirectory = path.dirname(__filename);
 if (process.cwd() !== scriptDirectory) {
   // Run the subscripts only if the package is installed as a dependency
 
   const childProcess = require("child_process");
-  const path = require("path");
   const packageJson = require("./package.json");
 
   function runScript(scriptPath) {
