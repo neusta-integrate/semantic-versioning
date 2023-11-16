@@ -29,5 +29,5 @@
     "publish-release": "npm publish",
     "postinstall": "node scripts/post-install.js"
   },
-  "version": "1.14.8"
+  "version": "1.15.0"
 }
