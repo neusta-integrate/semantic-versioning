@@ -4,6 +4,11 @@
     "url": "https://github.com/open4business/semantic-versioning/issues"
   },
   "description": "A comprehensive semantic versioning module designed to automate and streamline the release process across multiple projects. This module integrates seamlessly with 'semantic-release' and its plugins, providing a unified and customizable configuration for versioning, changelog generation, and publishing. It simplifies the setup for semantic version management, ensuring consistent versioning practices and reducing setup complexity in individual projects. Ideal for teams seeking a standardized, automated release workflow.",
+  "files": [
+    "README.md",
+    ".npmrc",
+    ".github/workflows/publish-semantic-release.yml"
+  ],
   "homepage": "https://github.com/open4business/semantic-versioning#readme",
   "license": "ISC",
   "name": "@open4business/semantic-versioning",
