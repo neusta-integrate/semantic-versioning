@@ -9,6 +9,21 @@
 - **Simplified Setup:** Easy to integrate, reducing setup complexity.
 - **Standardized Process:** Provides a consistent release workflow across projects.
 
+## Prerequisites
+Before you begin using @open4business/semantic-versioning, ensure that you have the following prerequisites in place:
+
+- **Node.js and npm:** The latest LTS version of Node.js and npm installed.
+- **Project Configuration:**
+  - **`package.json`:** Update the `package.json` file with project-specific values for semantic versioning:
+    - `name`: Define the unique name of your project.
+    - `version`: Start with an initial version (e.g., `1.0.0`).
+    - `repository`: Define the repository URL.
+- **Repository Secrets:**
+  - **NODE_AUTH_TOKEN_ORGANISATION_O4B:** A token from the GH account "organisationo4b" with the "package:read" permission.
+  - **O4B_GITHUB_ACTIONS_BOT:** The public key of a project-specific deploy key.
+- **GitHub Actions Settings:**
+  - Ensure that "Workflow permissions" are set to "Read and write permissions" in the "Actions" settings.
+
 ## Installation
 Install the module as a development dependency in your project:
 ```bash
