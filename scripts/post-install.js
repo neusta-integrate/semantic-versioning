@@ -1,20 +1,20 @@
-const childProcess = require("child_process");
-const path = require("path");
-const packageJson = require("./package.json");
-
 const scriptDirectory = path.dirname(__filename);
-
-function runScript(scriptPath) {
-  try {
-    childProcess.execSync(`node ${scriptPath}`, { stdio: "inherit" });
-  } catch (error) {
-    console.error(`Failed to execute ${scriptPath}: ${error}`);
-    process.exit(1);
-  }
-}
-
 if (process.cwd() !== scriptDirectory) {
   // Run the subscripts only if the package is installed as a dependency
+
+  const childProcess = require("child_process");
+  const path = require("path");
+  const packageJson = require("./package.json");
+
+  function runScript(scriptPath) {
+    try {
+      childProcess.execSync(`node ${scriptPath}`, { stdio: "inherit" });
+    } catch (error) {
+      console.error(`Failed to execute ${scriptPath}: ${error}`);
+      process.exit(1);
+    }
+  }
+
   runScript("./scripts/copy-workflow.js");
   runScript("./scripts/check-and-update-npmrc.js");
   runScript("./scripts/create-release-config.js");
