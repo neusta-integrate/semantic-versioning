@@ -8,6 +8,7 @@ on:
       - 'package.json'
 
 env:
+  CI: true
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN_ORGANISATION_O4B }}
 
