@@ -32,7 +32,6 @@ jobs:
 
       - name: Determine the new version number
         run: |
-          npx semantic-release --dry-run
           NEW_VERSION=$(npx semantic-release --dry-run | grep 'The next release version is' | sed 's/.*is //')
           echo "New version number: $NEW_VERSION"
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
