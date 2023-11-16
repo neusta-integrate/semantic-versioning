@@ -22,7 +22,7 @@ runScript("./scripts/create-releaserc.js");
 console.log(`Module "${packageJson.name}" has been successfully installed.`);
 
 const prerequisitesLink = packageJson.homepage
-  ? `${packageJson.homepage}#prerequisites`
+  ? packageJson.homepage.replace('#readme', '#prerequisites')
   : 'the "Prerequisites" section in the README';
 console.log(
   "\x1b[31m%s\x1b[0m",
