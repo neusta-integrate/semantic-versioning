@@ -42,11 +42,11 @@ jobs:
       - name: Commit update version
         if: env.NEW_VERSION != env.CURRENT_VERSION
         run: |
-          jq '.version="'$VERSION'"' package.json > temp.json && mv temp.json package.json
+          jq '.version="'$NEW_VERSION'"' package.json > temp.json && mv temp.json package.json
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add package.json
-          git commit -m "chore: update version to $VERSION"
+          git commit -m "chore: update version to $NEW_VERSION"
           git push origin HEAD:${{ github.head_ref }}
           echo "LAST_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
           echo "IS_VERSION_UPDATE_COMMIT_COMLETED=true" >> $GITHUB_ENV
