@@ -26,5 +26,5 @@
   "scripts": {
     "publish-release": "npm publish"
   },
-  "version": ""
+  "version": "1.12.0"
 }
