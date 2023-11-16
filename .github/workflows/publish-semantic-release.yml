@@ -47,7 +47,7 @@ jobs:
           git config --local user.name "GitHub Action"
           git add package.json
           git commit -m "chore: update version to $NEW_VERSION"
-          git push origin HEAD:${{ github.head_ref }}
+          git push origin HEAD
           echo "LAST_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
           echo "IS_VERSION_UPDATE_COMMIT_COMLETED=true" >> $GITHUB_ENV
 
