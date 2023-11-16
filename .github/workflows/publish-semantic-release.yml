@@ -71,7 +71,7 @@ jobs:
         if: failure() && env.IS_VERSION_UPDATE_COMMIT_COMLETED
         run: |
           git reset --hard ${{ env.LAST_COMMIT_SHA }}^
-          git push origin HEAD:${{ github.ref }} --force
+          git push -f
 
       - name: Revert "Publish" on failure
         if: failure() && env.IS_PUBLISH_COMLETED
