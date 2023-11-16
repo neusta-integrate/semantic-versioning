@@ -15,9 +15,9 @@ function runScript(scriptPath) {
   }
 }
 
-runScript("./scripts/copy-workflow.js");
-runScript("./scripts/check-and-update-npmrc.js");
-runScript("./scripts/create-release-config.js");
+runScript("./copy-workflow.js");
+runScript("./check-and-update-npmrc.js");
+runScript("./create-release-config.js");
 
 console.log(`Module "${packageJson.name}" has been successfully installed.`);
 
