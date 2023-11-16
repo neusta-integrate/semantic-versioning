@@ -4,7 +4,7 @@ if (process.env.CI) {
 }
 
 const childProcess = require("child_process");
-const packageJson = require("./package.json");
+const packageJson = require("../package.json");
 
 function runScript(scriptPath) {
   try {
