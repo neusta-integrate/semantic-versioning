@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const npmrcPath = path.join(process.cwd(), '.npmrc');
+const projectRoot = path.join(process.cwd(), '../../');
+const npmrcPath = path.join(projectRoot, '.npmrc');
 const ourNpmrcContent = `# Your npmrc configurations`;
 
 // Check if .npmrc exists
