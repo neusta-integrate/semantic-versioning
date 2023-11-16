@@ -7,7 +7,7 @@ on:
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   release:
@@ -48,7 +48,7 @@ jobs:
           git config --local user.name "GitHub Action"
           git add package.json
           git commit -m "chore: update version to $NEW_VERSION"
-          git push origin HEAD
+          git push
           echo "LAST_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
           echo "IS_VERSION_UPDATE_COMMIT_COMLETED=true" >> $GITHUB_ENV
 
