@@ -1,7 +1,7 @@
 # @open4business/semantic-versioning
 
 ## About
-@open4business/semantic-versioning is an advanced tool designed to automate and standardize the semantic versioning process across multiple projects. This module integrates seamlessly with `semantic-release` and `@open4business/commit-rules`, simplifying the setup and ensuring consistent versioning and commit practices.
+`@open4business/semantic-versioning` is an advanced tool designed to automate and standardize the semantic versioning process across multiple projects. This module integrates seamlessly with `semantic-release` and `@open4business/commit-rules`, simplifying the setup and ensuring consistent versioning and commit practices.
 
 ## Key Features
 - **Automated Version Management:** Leverages commit messages to automatically manage semantic versioning.
@@ -10,7 +10,7 @@
 - **Standardized Process:** Provides a consistent release workflow across projects.
 
 ## Prerequisites
-Before you begin using @open4business/semantic-versioning, ensure that you have the following prerequisites in place:
+Before you begin using `@open4business/semantic-versioning`, ensure that you have the following prerequisites in place:
 
 - **Node.js and npm:** The latest LTS version of Node.js and npm installed.
 - **Project Configuration:**
@@ -18,6 +18,7 @@ Before you begin using @open4business/semantic-versioning, ensure that you have 
     - `name`: Define the unique name of your project.
     - `version`: Start with an initial version (e.g., `1.0.0`).
     - `repository`: Define the repository URL.
+    - `scripts`: Include a `publish-release` script definition.
 - **Repository Secrets:**
   - **NODE_AUTH_TOKEN_ORGANISATION_O4B:** A token from the GH account "organisationo4b" with the "package:read" permission.
   - **O4B_GITHUB_ACTIONS_BOT:** The public key of a project-specific deploy key.
@@ -31,18 +32,11 @@ npm install @open4business/semantic-versioning --save-dev
 ```
 
 ## Usage
-To use this module, configure your project's `.releaserc` file to extend `@open4business/semantic-versioning`. Ensure that your commit messages adhere to the Conventional Commits standard.
-
-### Example `.releaserc` Configuration
-```json
-{
-  "extends": "@open4business/semantic-versioning"
-}
-```
+Once installed, `@open4business/semantic-versioning` is configured to work seamlessly. The critical part of the release process is the `npm run publish-release` command, which should be defined in your `package.json` under `scripts`. This command is automatically called at the end of the workflow to publish the release.
 
 ## Workflow
 - Make changes in a separate branch and create a pull request to merge these changes into the `main` branch.
-- Once the pull request is merged, the `publish-npm.yml` GitHub Action will automatically run, handling the semantic versioning and publishing the package to NPM.
+- Once the pull request is merged, the `publish-semantic-release.yml` GitHub Action will automatically run, handling the semantic versioning and publishing the package to NPM.
 
 ### Enforcing Angular Commit Message Conventions
 Use `@open4business/commit-rules` to ensure that your commit messages follow the Angular Commit Message Conventions format. This is crucial for the `semantic-release` tool to correctly determine version bumps.
