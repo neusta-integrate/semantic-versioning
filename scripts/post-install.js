@@ -1,8 +1,3 @@
-if (process.env.CI) {
-  console.log("CI/CD environment detected, skipping post-install script.");
-  process.exit(0);
-}
-
 const childProcess = require("child_process");
 const packageJson = require("../package.json");
 
