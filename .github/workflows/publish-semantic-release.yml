@@ -1,4 +1,4 @@
-name: Publish Semantic Release plus some stupid change
+name: Publish Semantic Release
 
 on:
   push:
