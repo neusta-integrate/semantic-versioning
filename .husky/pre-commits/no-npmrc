@@ -1,7 +1,15 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/../_/husky.sh"
 
-if git diff --cached --name-only | grep -e '\.npmrc'; then
-  echo "Error: .npmrc should not be committed."
-  exit 1
+# Check for .npmrc files in the staging area
+npmrc_files=$(git diff --cached --name-only | grep -e '\.npmrc')
+if [ -n "$npmrc_files" ]; then
+  # Loop through each .npmrc file
+  for file in $npmrc_files; do
+    # Check if _authToken=${ is in the file
+    if ! grep -q "_authToken=\${" "$file"; then
+      echo "Error: .npmrc file should contain \"_authToken=\${\" (token as variable)."
+      exit 1
+    fi
+  done
 fi
