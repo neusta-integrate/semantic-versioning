@@ -1,10 +1,11 @@
 # @open4business/semantic-versioning
 
 ## About
-`@open4business/semantic-versioning` is an advanced tool designed to automate and standardize the semantic versioning process across multiple projects. This module integrates seamlessly with `semantic-release`, simplifying the setup and ensuring consistent versioning and commit practices.
+`@open4business/semantic-versioning` is an advanced tool designed to automate and standardize the semantic versioning process across multiple projects. This module integrates seamlessly with `semantic-release` and `@open4business/commit-rules`, simplifying the setup and ensuring consistent versioning and commit practices.
 
 ## Key Features
 - **Automated Version Management:** Leverages commit messages to automatically manage semantic versioning.
+- **Angular Commit Message Conventions Enforcement:** Integrates with `@open4business/commit-rules` to ensure commit messages follow the Conventional Commits format.
 - **Simplified Setup:** Easy to integrate, reducing setup complexity.
 - **Standardized Process:** Provides a consistent release workflow across projects.
 
@@ -37,8 +38,11 @@ Once installed, `@open4business/semantic-versioning` is configured to work seaml
 - Make changes in a separate branch and create a pull request to merge these changes into the `main` branch.
 - Once the pull request is merged, the `publish-semantic-release.yml` GitHub Action will automatically run, handling the semantic versioning and publishing the package to NPM.
 
+### Enforcing Angular Commit Message Conventions
+Use `@open4business/commit-rules` to ensure that your commit messages follow the Angular Commit Message Conventions format. This is crucial for the `semantic-release` tool to correctly determine version bumps.
+
 ## Best Practices
-- Regularly update `@open4business/semantic-versioning` to benefit from the latest features and improvements.
+- Regularly update `@open4business/semantic-versioning` and `@open4business/commit-rules` to benefit from the latest features and improvements.
 - Follow the [Angular Commit Message Conventions](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-format) format strictly to ensure accurate semantic versioning.
 
 ## Support and Contributions
