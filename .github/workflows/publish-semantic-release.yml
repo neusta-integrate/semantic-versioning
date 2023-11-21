@@ -27,22 +27,22 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm clean-install --ignore-scripts
 
-      - name: Determine the new version number
+      - name: Determine the New Version Number
         run: |
           NEW_VERSION=$(npx semantic-release --dry-run | grep 'next release version is' | sed 's/.*is //')
           echo "New version number: $NEW_VERSION"
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
-      - name: Read the current version number
+      - name: Read the Current Version Number
         run: |
           CURRENT_VERSION=$(jq -r '.version' package.json)
           echo "Current version number: $CURRENT_VERSION"
           echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
 
-      - name: Commit update version
+      - name: Commit Update Version
         if: env.NEW_VERSION != env.CURRENT_VERSION
         run: |
           jq '.version="'$NEW_VERSION'"' package.json > temp.json && mv temp.json package.json
@@ -66,7 +66,7 @@ jobs:
           npm run publish-release
           echo "IS_PUBLISH_COMLETED=true" >> $GITHUB_ENV
 
-      - name: Revert "Publish" on failure
+      - name: Revert "Publish" on Failure
         if: failure() && env.IS_PUBLISH_COMLETED
         run: |
           RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -77,13 +77,13 @@ jobs:
               "https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID"
           fi
 
-      - name: Revert "Semantic Release" on failure
+      - name: Revert "Semantic Release" on Failure
         if: failure() && env.IS_SEMANTIC_RELEASE_COMLETED
         run: |
           git push --delete origin v${{ env.VERSION }}
           git tag -d v${{ env.VERSION }}
 
-      - name: Revert "Commit update version" on failure
+      - name: Revert "Commit update version" on Failure
         if: failure() && env.IS_VERSION_UPDATE_COMMIT_COMLETED
         run: |
           git reset --hard ${{ env.LAST_COMMIT_SHA }}^
