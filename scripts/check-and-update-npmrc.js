@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const sourcePath = path.join(process.cwd(), './.npmrc');
-const targetPath = path.join(process.cwd(), '../../../.npmrc');
+const targetPath = path.join(process.env.INIT_CWD, './.npmrc');
 
 // Function to read the .npmrc file and return its content
 function readNpmrcFile() {

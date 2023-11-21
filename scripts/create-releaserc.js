@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const releaseConfigPath = path.join(process.cwd(), '../../../.releaserc');
+const releaseConfigPath = path.join(process.env.INIT_CWD, './.releaserc');
 const releaseConfigContent = `{
   "extends": "@open4business/semantic-versioning"
 }
