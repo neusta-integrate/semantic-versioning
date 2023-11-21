@@ -6,6 +6,7 @@ on:
       - main
     paths-ignore:
       - 'package.json'
+  workflow_dispatch:
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -65,12 +66,6 @@ jobs:
           npm run publish-release
           echo "IS_PUBLISH_COMLETED=true" >> $GITHUB_ENV
 
-      - name: Revert "Commit update version" on failure
-        if: failure() && env.IS_VERSION_UPDATE_COMMIT_COMLETED
-        run: |
-          git reset --hard ${{ env.LAST_COMMIT_SHA }}^
-          git push -f
-
       - name: Revert "Publish" on failure
         if: failure() && env.IS_PUBLISH_COMLETED
         run: |
@@ -87,3 +82,9 @@ jobs:
         run: |
           git push --delete origin v${{ env.VERSION }}
           git tag -d v${{ env.VERSION }}
+
+      - name: Revert "Commit update version" on failure
+        if: failure() && env.IS_VERSION_UPDATE_COMMIT_COMLETED
+        run: |
+          git reset --hard ${{ env.LAST_COMMIT_SHA }}^
+          git push -f
