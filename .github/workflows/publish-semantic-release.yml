@@ -36,6 +36,11 @@ jobs:
           echo "New version number: $NEW_VERSION"
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
+          if [ -z "$NEW_VERSION" ]; then
+            echo "No new version number determined, exiting workflow."
+            exit 1
+          fi
+
       - name: Read the Current Version Number
         run: |
           CURRENT_VERSION=$(jq -r '.version' package.json)
