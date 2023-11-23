@@ -4,6 +4,9 @@
     "url": "https://github.com/open4business/semantic-versioning/issues"
   },
   "description": "A comprehensive semantic versioning module designed to automate and streamline the release process across multiple projects. This module integrates seamlessly with 'semantic-release' and its plugins, providing a unified and customizable configuration for versioning, changelog generation, and publishing. It simplifies the setup for semantic version management, ensuring consistent versioning practices and reducing setup complexity in individual projects. Ideal for teams seeking a standardized, automated release workflow.",
+  "devDependencies": {
+    "@open4business/commit-rules": "^1.0.0"
+  },
   "files": [
     "scripts/*",
     ".github/workflows/publish-semantic-release.yml",
@@ -17,7 +20,6 @@
   "main": "index.js",
   "name": "@open4business/semantic-versioning",
   "peerDependencies": {
-    "@open4business/commit-rules": "^1.0.0",
     "@semantic-release/commit-analyzer": "^11.1.0",
     "@semantic-release/github": "^9.2.3",
     "@semantic-release/release-notes-generator": "^12.1.0",
