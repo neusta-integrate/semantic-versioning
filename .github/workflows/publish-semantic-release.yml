@@ -6,7 +6,6 @@ on:
       - main
     paths-ignore:
       - 'package.json'
-  workflow_dispatch:
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -38,7 +37,7 @@ jobs:
 
           if [ -z "$NEW_VERSION" ]; then
             echo "No new version number determined, exiting workflow."
-            exit 1
+            exit 0
           fi
 
       - name: Read the Current Version Number
