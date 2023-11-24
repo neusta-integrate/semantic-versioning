@@ -13,6 +13,15 @@
 Before you begin using `@open4business/semantic-versioning`, ensure that you have the following prerequisites in place:
 
 - **Node.js and npm:** The latest LTS version of Node.js and npm installed.
+- **GitHub Packages Access:**
+  - Create a `.npmrc` file in your project root with the following content to configure access to GitHub Packages:
+    ```
+    @open4business:registry=https://npm.pkg.github.com/
+    //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+    ```
+  - The `NODE_AUTH_TOKEN` is a Personal Access Token (PAT) that you need to generate on GitHub. This token should have the "packages:read" permission to allow access to GitHub Packages.
+  - To set `NODE_AUTH_TOKEN` as an environment variable, run `export NODE_AUTH_TOKEN='your_token_here'` in the terminal. Replace `your_token_here` with your actual PAT.
+  - For detailed instructions on creating a Personal Access Token, refer to the GitHub manual: [Creating a personal access token](https://docs.github.com/en/enterprise-server@3.6/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token).
 - **Project Configuration:**
   - **`package.json`:** Update the `package.json` file with project-specific values for semantic versioning:
     - `name`: Define the unique name of your project.
