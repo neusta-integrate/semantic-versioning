@@ -36,18 +36,18 @@ jobs:
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
           if [ -z "$NEW_VERSION" ]; then
-            echo "No new version number determined, exiting workflow."
-            exit 0
+            echo "::notice::No relevant changes have been detected. The workflow will be terminated without publishing a new release."
           fi
 
       - name: Read the Current Version Number
+        if: env.NEW_VERSION != ''
         run: |
           CURRENT_VERSION=$(jq -r '.version' package.json)
           echo "Current version number: $CURRENT_VERSION"
           echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
 
       - name: Commit Update Version
-        if: env.NEW_VERSION != env.CURRENT_VERSION
+        if: env.NEW_VERSION != '' && env.NEW_VERSION != env.CURRENT_VERSION
         run: |
           jq '.version="'$NEW_VERSION'"' package.json > temp.json && mv temp.json package.json
           git config --local user.email "action@github.com"
@@ -59,19 +59,19 @@ jobs:
           echo "IS_VERSION_UPDATE_COMMIT_COMLETED=true" >> $GITHUB_ENV
 
       - name: Semantic Release
-        if: success()
+        if: env.NEW_VERSION != '' && success()
         run: |
           npx semantic-release
           echo "IS_SEMANTIC_RELEASE_COMLETED=true" >> $GITHUB_ENV
 
       - name: Publish
-        if: success()
+        if: env.NEW_VERSION != '' && success()
         run: |
           npm run publish-release
           echo "IS_PUBLISH_COMLETED=true" >> $GITHUB_ENV
 
       - name: Revert "Publish" on Failure
-        if: failure() && env.IS_PUBLISH_COMLETED
+        if: env.NEW_VERSION != '' && failure() && env.IS_PUBLISH_COMLETED
         run: |
           RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.VERSION }}" \
@@ -82,13 +82,13 @@ jobs:
           fi
 
       - name: Revert "Semantic Release" on Failure
-        if: failure() && env.IS_SEMANTIC_RELEASE_COMLETED
+        if: env.NEW_VERSION != '' && failure() && env.IS_SEMANTIC_RELEASE_COMLETED
         run: |
           git push --delete origin v${{ env.VERSION }}
           git tag -d v${{ env.VERSION }}
 
       - name: Revert "Commit update version" on Failure
-        if: failure() && env.IS_VERSION_UPDATE_COMMIT_COMLETED
+        if: env.NEW_VERSION != '' && failure() && env.IS_VERSION_UPDATE_COMMIT_COMLETED
         run: |
           git reset --hard ${{ env.LAST_COMMIT_SHA }}^
           git push -f
