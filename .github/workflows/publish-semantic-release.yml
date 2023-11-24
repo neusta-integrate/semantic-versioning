@@ -6,10 +6,12 @@ on:
       - main
     paths-ignore:
       - 'package.json'
+      - '.github/workflows/**'
+  workflow_dispatch:
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN_ORGANISATION_O4B }}
+  NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN_GLOBAL_O4B }}
 
 jobs:
   release:
