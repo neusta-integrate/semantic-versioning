@@ -36,7 +36,7 @@ jobs:
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
           if [ -z "$NEW_VERSION" ]; then
-            echo "::warning::No relevant changes have been detected. The workflow will be terminated without publishing a new release."
+            echo "::warning title=No Release::No relevant changes have been detected. The workflow will be terminated without publishing a new release."
           fi
 
       - name: Read the Current Version Number
@@ -63,16 +63,16 @@ jobs:
         run: |
           npx semantic-release
           echo "IS_SEMANTIC_RELEASE_COMLETED=true" >> $GITHUB_ENV
-          echo "::notice::Tag and release for version $NEW_VERSION have been created."
+          echo "::notice title=Semantic Release::Tag and release for version $NEW_VERSION have been created."
 
-      - name: Publish
+      - name: Publish Package
         if: env.NEW_VERSION != '' && success()
         run: |
           npm run publish-release
           echo "IS_PUBLISH_COMLETED=true" >> $GITHUB_ENV
-          echo "::notice::The release for version $NEW_VERSION has been published to GitHub Packages."
+          echo "::notice title=Publish Package::The release for version $NEW_VERSION has been published to GitHub Packages."
 
-      - name: Revert "Publish" on Failure
+      - name: Revert "Publish Package" on Failure
         if: env.NEW_VERSION != '' && failure() && env.IS_PUBLISH_COMLETED
         run: |
           RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
