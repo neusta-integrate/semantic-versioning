@@ -63,12 +63,14 @@ jobs:
         run: |
           npx semantic-release
           echo "IS_SEMANTIC_RELEASE_COMLETED=true" >> $GITHUB_ENV
+          echo "::notice::Tag and release for version $NEW_VERSION have been created."
 
       - name: Publish
         if: env.NEW_VERSION != '' && success()
         run: |
           npm run publish-release
           echo "IS_PUBLISH_COMLETED=true" >> $GITHUB_ENV
+          echo "::notice::The package for version $NEW_VERSION has been published to npm."
 
       - name: Revert "Publish" on Failure
         if: env.NEW_VERSION != '' && failure() && env.IS_PUBLISH_COMLETED
