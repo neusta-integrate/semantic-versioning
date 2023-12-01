@@ -78,7 +78,7 @@ jobs:
         if: env.NEW_VERSION != '' && failure() && env.IS_PUBLISH_COMLETED
         run: |
           RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.VERSION }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.NEW_VERSION }}" \
             | jq -r '.id')
           if [ "$RELEASE_ID" != "null" ]; then
             curl -s -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -88,8 +88,8 @@ jobs:
       - name: Revert "Semantic Release" on Failure
         if: env.NEW_VERSION != '' && failure() && env.IS_SEMANTIC_RELEASE_COMLETED
         run: |
-          git push --delete origin v${{ env.VERSION }}
-          git tag -d v${{ env.VERSION }}
+          git push --delete origin v${{ env.NEW_VERSION }}
+          git tag -d v${{ env.NEW_VERSION }}
 
       - name: Revert "Commit update version" on Failure
         if: env.NEW_VERSION != '' && failure() && env.IS_VERSION_UPDATE_COMMIT_COMLETED
