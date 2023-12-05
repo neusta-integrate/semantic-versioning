@@ -25,14 +25,17 @@ jobs:
           fi
 
       - name: Set up Node.js
+        if: env.RUN_LINT == 'true'
         uses: actions/setup-node@v3
         with:
           node-version: "20"
 
       - name: Remove package-lock.json
+        if: env.RUN_LINT == 'true'
         run: rm -f package-lock.json
 
       - name: Update packages to use latest "@open4business/formatter-..."
+        if: env.RUN_LINT == 'true'
         run: |
           jq '(
             if .dependencies then .dependencies |= with_entries(
@@ -46,6 +49,7 @@ jobs:
 
 
       - name: Install dependencies
+        if: env.RUN_LINT == 'true'
         run: npm install --ignore-scripts
 
       - name: Run Linter
