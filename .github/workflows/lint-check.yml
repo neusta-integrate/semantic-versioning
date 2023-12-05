@@ -1,0 +1,37 @@
+name: Lint Check
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+env:
+  NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN_GLOBAL_O4B }}
+
+jobs:
+  check-lint-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm clean-install --ignore-scripts
+
+      - name: Check if lint script exists
+        run: |
+          if npm run --json | grep -q '"lint":'; then
+            echo "Lint script exists."
+            echo "RUN_LINT=true" >> $GITHUB_ENV
+          else
+            echo "::warning title=No Linter::Lint script does not exist. Skipping lint step."
+            exit 0
+          fi
+
+      - name: Run Linter
+        if: env.RUN_LINT == 'true'
+        run: npm run lint
