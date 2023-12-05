@@ -11,7 +11,7 @@ function runScript(scriptPath) {
   }
 }
 
-runScript('./scripts/copy-workflow.js');
+runScript('./scripts/copy-workflows.js');
 runScript('./scripts/check-and-update-npmrc.js');
 runScript('./scripts/create-releaserc.js');
 
