@@ -30,6 +30,7 @@ jobs:
           else
             echo "::warning title=No Linter::Lint script does not exist. Skipping lint step."
             exit 0
+          fi
 
       - name: Run Linter
         if: env.RUN_LINT == 'true'
