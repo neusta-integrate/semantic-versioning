@@ -36,7 +36,7 @@ jobs:
 
 
       - name: Install dependencies
-        run: npm clean-install --ignore-scripts
+        run: npm install --ignore-scripts
 
       - name: Check if lint script exists
         run: |
