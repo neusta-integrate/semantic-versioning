@@ -10,7 +10,7 @@
   },
   "files": [
     "scripts/*",
-    ".github/workflows/publish-semantic-release.yml",
+    ".github/workflows/*",
     ".npmrc",
     "index.js",
     "README.md",
