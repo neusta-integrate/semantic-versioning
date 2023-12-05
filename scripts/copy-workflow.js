@@ -7,7 +7,7 @@ const targetPath = path.join(process.env.INIT_CWD, './.github/workflows/publish-
 // Ensure .github/workflows directory exists
 const workflowsDir = path.dirname(targetPath);
 if (!fs.existsSync(workflowsDir)) {
-    fs.mkdirSync(workflowsDir, { recursive: true });
+  fs.mkdirSync(workflowsDir, { recursive: true });
 }
 
 // Copy the workflow file
