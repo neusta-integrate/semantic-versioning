@@ -44,7 +44,7 @@ jobs:
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           DATE_TIME=$(date +'%Y%m%d.%H%M')
           NEW_VERSION=""
-          BASE_VERSION=$(echo env.CURRENT_VERSION | sed -E 's/-dev.*|-rc.*//')
+          BASE_VERSION=$(echo $CURRENT_VERSION | sed -E 's/-dev.*|-rc.*//')
 
           case $BRANCH_NAME in
             "develop")
