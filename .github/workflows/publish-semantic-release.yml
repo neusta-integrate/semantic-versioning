@@ -55,8 +55,9 @@ jobs:
               NEW_VERSION=$(npx semantic-release --dry-run | grep 'next release version is' | sed 's/.*is //');;
           esac
 
-          if [ -z "$NEW_VERSION" ]; then
+          if [ -z "$NEW_VERSION" ] && [ "$BRANCH_NAME" = "main" ]; then
             echo "::warning title=No Release::No relevant changes have been detected. The workflow will be terminated without publishing a new release."
+            exit 0
           fi
 
           echo "New version number: $NEW_VERSION"
