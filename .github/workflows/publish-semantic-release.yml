@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - develop
+      - stage
     paths-ignore:
-      - 'package.json'
-      - '.github/workflows/**'
+      - "package.json"
+      - ".github/workflows/**"
   workflow_dispatch:
 
 env:
@@ -31,22 +33,33 @@ jobs:
       - name: Install Dependencies
         run: npm clean-install --ignore-scripts
 
-      - name: Determine the New Version Number
-        run: |
-          NEW_VERSION=$(npx semantic-release --dry-run | grep 'next release version is' | sed 's/.*is //')
-          echo "New version number: $NEW_VERSION"
-          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
-
-          if [ -z "$NEW_VERSION" ]; then
-            echo "::warning title=No Release::No relevant changes have been detected. The workflow will be terminated without publishing a new release."
-          fi
-
       - name: Read the Current Version Number
-        if: env.NEW_VERSION != ''
         run: |
           CURRENT_VERSION=$(jq -r '.version' package.json)
           echo "Current version number: $CURRENT_VERSION"
           echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+
+      - name: Determine the New Version Number
+        run: |
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          DATE_TIME=$(date +'%Y%m%d.%H%M')
+          NEW_VERSION=""
+          BASE_VERSION=$(echo env.CURRENT_VERSION | sed -E 's/-dev.*|-rc.*//')
+
+          case $BRANCH_NAME in
+            "develop")
+              NEW_VERSION="$BASE_VERSION-dev.$DATE_TIME";;
+            "stage")
+              NEW_VERSION="$BASE_VERSION-rc.$DATE_TIME";;
+            "main")
+              NEW_VERSION=$(npx semantic-release --dry-run | grep 'next release version is' | sed 's/.*is //');;
+              if [ -z "$NEW_VERSION" ]; then
+                echo "::warning title=No Release::No relevant changes have been detected. The workflow will be terminated without publishing a new release."
+              fi
+          esac
+
+          echo "New version number: $NEW_VERSION"
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
       - name: Commit Update Version
         if: env.NEW_VERSION != '' && env.NEW_VERSION != env.CURRENT_VERSION
@@ -61,7 +74,7 @@ jobs:
           echo "IS_VERSION_UPDATE_COMMIT_COMLETED=true" >> $GITHUB_ENV
 
       - name: Semantic Release
-        if: env.NEW_VERSION != '' && success()
+        if: github.ref == 'refs/heads/main' && env.NEW_VERSION != '' && success()
         run: |
           npx semantic-release
           echo "IS_SEMANTIC_RELEASE_COMLETED=true" >> $GITHUB_ENV
@@ -86,7 +99,7 @@ jobs:
           fi
 
       - name: Revert "Semantic Release" on Failure
-        if: env.NEW_VERSION != '' && failure() && env.IS_SEMANTIC_RELEASE_COMLETED
+        if: github.ref == 'refs/heads/main' && env.NEW_VERSION != '' && failure() && env.IS_SEMANTIC_RELEASE_COMLETED
         run: |
           git push --delete origin v${{ env.NEW_VERSION }}
           git tag -d v${{ env.NEW_VERSION }}
