@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+      - develop
+      - stage
     paths-ignore:
       - "package.json"
       - ".github/workflows/**"
