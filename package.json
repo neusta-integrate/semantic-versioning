@@ -36,5 +36,5 @@
     "publish-release": "npm publish",
     "postinstall": "node scripts/post-install.js"
   },
-  "version": "1.8.2-dev.20240130.1413"
+  "version": "1.9.0"
 }
