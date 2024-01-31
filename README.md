@@ -73,9 +73,10 @@ For the further development of the formatter-scss module, additional steps are r
 
 - **Repository Secrets** (`[YourRepoUrl]/settings/secrets/actions`):
   - **O4B_GITHUB_ACTIONS_BOT**: The public key of a project-specific deploy key.
-    - `Step 1`: Create key e.g. with a bash command `ssh-keygen -t ed25519` and save it somewhere.
+    - `Step 1`: Generate a key, e.g., with a bash command `ssh-keygen -t ed25519 -f ./deploy_key_do_not_check_in -q -N "" -C ""` and save it securely.
     - `Step 2`: Add deploy key in `[YourRepoUrl]/settings/keys`.
     - `Step 3`: Set title to e.g. `GitHub_Actions-Bot`, use the public part of the key created in `Step 1` as key and check `Allow write access`.
     - `Step 4`: Create repository secret `O4B_GITHUB_ACTIONS_BOT` with the private part of the key created in `Step 1`.
+    - `Step 5`: Remove the `deploy_key_do_not_check_in` and `deploy_key_do_not_check_in.pub` files. It's crucial that these are not checked in.
 - **GitHub Actions Settings** (`[YourRepoUrl]/settings/actions`):
   - Ensure that "Workflow permissions" are set to "Read and write permissions" in the "Actions" settings.
