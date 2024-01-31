@@ -14,8 +14,8 @@ on:
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN || secrets.NODE_AUTH_TOKEN_GLOBAL_O4B }}
-  REGISTRY_URL: ${{ secrets.REGISTRY_URL || env.REGISTRY_URL_GITHUB }}
   REGISTRY_URL_GITHUB: "https://npm.pkg.github.com"
+  REGISTRY_URL: ${{ secrets.REGISTRY_URL || env.REGISTRY_URL_GITHUB }}
 
 jobs:
   release:
