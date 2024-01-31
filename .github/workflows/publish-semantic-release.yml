@@ -13,7 +13,9 @@ on:
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN_GLOBAL_O4B }}
+  REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN || secrets.NODE_AUTH_TOKEN_GLOBAL_O4B }}
+  REGISTRY_URL: ${{ secrets.REGISTRY_URL || env.REGISTRY_URL_GITHUB }}
+  REGISTRY_URL_GITHUB: "https://npm.pkg.github.com"
 
 jobs:
   release:
@@ -29,6 +31,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "20"
+          registry-url: ${{ env.REGISTRY_URL }}
 
       - name: Install Dependencies
         run: npm clean-install --ignore-scripts
@@ -87,17 +90,23 @@ jobs:
         run: |
           npm run publish-release
           echo "IS_PUBLISH_COMLETED=true" >> $GITHUB_ENV
-          echo "::notice title=Publish Package::The release for version $NEW_VERSION has been published to GitHub Packages."
+          echo "::notice title=Publish Package::The release for version $NEW_VERSION has been published."
+        env:
+          NODE_AUTH_TOKEN: ${{ env.REGISTRY_TOKEN }}
 
       - name: Revert "Publish Package" on Failure
         if: env.NEW_VERSION != '' && failure() && env.IS_PUBLISH_COMLETED
         run: |
-          RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.NEW_VERSION }}" \
-            | jq -r '.id')
-          if [ "$RELEASE_ID" != "null" ]; then
-            curl -s -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              "https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID"
+          if [ "${{ env.REGISTRY_URL }}" == env.REGISTRY_URL_GITHUB ]; then
+            RELEASE_ID=$(curl -s -H "Authorization: token ${{ env.GH_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.NEW_VERSION }}" \
+              | jq -r '.id')
+            if [ "$RELEASE_ID" != "null" ]; then
+              curl -s -X DELETE -H "Authorization: token ${{ env.GH_TOKEN }}" \
+                "https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID"
+            fi
+          else
+            echo "Manual intervention required for reverting the package published to a non-GitHub registry."
           fi
 
       - name: Revert "Semantic Release" on Failure
