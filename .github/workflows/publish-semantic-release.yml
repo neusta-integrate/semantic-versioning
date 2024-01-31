@@ -14,7 +14,8 @@ on:
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN || secrets.NODE_AUTH_TOKEN_GLOBAL_O4B }}
-  REGISTRY_URL: ${{ secrets.REGISTRY_URL || 'https://npm.pkg.github.com' }}
+  REGISTRY_URL_GITHUB: "https://npm.pkg.github.com"
+  REGISTRY_URL: ${{ secrets.REGISTRY_URL || env.REGISTRY_URL_GITHUB }}
 
 jobs:
   release:
@@ -96,7 +97,7 @@ jobs:
       - name: Revert "Publish Package" on Failure
         if: env.NEW_VERSION != '' && failure() && env.IS_PUBLISH_COMLETED
         run: |
-          if [ -z "${{ secrets.REGISTRY_URL }}" ]; then
+          if [ "${{ env.REGISTRY_URL }}" == env.REGISTRY_URL_GITHUB ]; then
             RELEASE_ID=$(curl -s -H "Authorization: token ${{ env.GH_TOKEN }}" \
               "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.NEW_VERSION }}" \
               | jq -r '.id')
