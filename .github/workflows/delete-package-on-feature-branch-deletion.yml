@@ -14,7 +14,7 @@ jobs:
 
       - name: Extract branch name
         id: branch_name
-        run: echo "BRANCH=$(cat ${{ github.event_path }} | jq --raw-output '.ref')" >> $GITHUB_ENV
+        run: echo "BRANCH_NAME=$(cat ${{ github.event_path }} | jq --raw-output '.ref')" >> $GITHUB_ENV
 
       - name: Delete package version associated with the deleted branch
         run: |
