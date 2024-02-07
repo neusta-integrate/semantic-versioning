@@ -14,7 +14,8 @@ jobs:
 
       # Debug-Log für den gesamten GitHub-Kontext
       - name: Echo github event path
-        run: echo "GitHub Event Path: ${{ github.event_path }}"
+        run: |
+          echo "GitHub Event Path: ${{ github.event_path }}"
 
       # Debug-Log für den Branch-Namen
       - name: Extract branch name
@@ -26,7 +27,8 @@ jobs:
 
       # Bestätigung, dass der Branch-Name korrekt extrahiert wurde
       - name: Confirm extracted branch name
-        run: echo "Confirmed Branch Name: ${{ env.BRANCH_NAME }}"
+        run: |
+          echo "Confirmed Branch Name: ${{ env.BRANCH_NAME }}"
 
       - name: Delete package version associated with the deleted branch
         run: |
