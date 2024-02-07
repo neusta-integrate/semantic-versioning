@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Define variables
-ORGANISATION="open4business"
-PACKAGE_NAME="olympus-stenciljs-component-library"
+ORGANISATION=${github.repository_owner}
+PACKAGE_NAME=$(echo "${{ github.event.repository }}" | cut -d'/' -f2)
 VERSION_TO_DELETE="$NEW_VERSION"
 
 # Fetch package versions
