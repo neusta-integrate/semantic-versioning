@@ -40,7 +40,7 @@ jobs:
           ./.github/workflows/scripts/determine-new-version.sh
 
       - name: Commit Update Version
-        if: env.NEW_VERSION != '' && env.NEW_VERSION != env.CURRENT_VERSION
+        if: github.ref == 'refs/heads/main' && env.NEW_VERSION != '' && env.NEW_VERSION != env.CURRENT_VERSION
         run: |
           chmod +x ./.github/workflows/scripts/commit-update-version.sh
           ./.github/workflows/scripts/commit-update-version.sh
