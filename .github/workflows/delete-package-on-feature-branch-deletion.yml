@@ -1,0 +1,51 @@
+name: Delete Package on Feature Branch Deletion
+
+on:
+  delete:
+    branches:
+      - "**"
+
+jobs:
+  delete_package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Github context
+        run: echo "${{ toJson(github) }}"
+
+      - name: Extract branch name
+        id: branch_name
+        run: |
+          echo "BRANCH_NAME=$(cat ${{ github.event_path }} | jq --raw-output '.ref')" >> $GITHUB_ENV
+          echo "Extracted Branch Name: ${BRANCH_NAME}"
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+
+      - name: Delete package version associated with the deleted branch
+        run: |
+          ORGANIZATION="${{ github.repository_owner }}"
+          PACKAGE_NAME="${{ github.event.repository.name }}"
+          BRANCH_NAME="${{ env.BRANCH_NAME }}"
+          VERSION_TAG_PATTERN=".*\"$BRANCH_NAME\"$"
+
+          echo "Organization: $ORGANIZATION"
+          echo "Package Name: $PACKAGE_NAME"
+          echo "Branch Name: $BRANCH_NAME"
+          echo "Version Tag Pattern: $VERSION_TAG_PATTERN"
+
+          echo "Searching package versions to delete for branch: $BRANCH_NAME"
+
+          PACKAGE_INFO=$(curl -X GET "https://api.github.com/orgs/$ORGANIZATION/packages/npm/$PACKAGE_NAME/versions" \
+            -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json")
+
+          VERSION_IDS=$(echo "$PACKAGE_INFO" | jq -r --arg VERSION_TAG_PATTERN "$VERSION_TAG_PATTERN" '.[] | select(.name | test($VERSION_TAG_PATTERN)) | .id')
+
+          if [ -z "$VERSION_IDS" ]; then
+              echo "::notice title=Package Deletion::No matching versions found for branch $BRANCH_NAME."
+          else
+              for VERSION_ID in $VERSION_IDS; do
+                  echo "::notice title=Package Deletion::Deleting package version ID: $VERSION_ID"
+                  curl -X DELETE "https://api.github.com/orgs/$ORGANIZATION/packages/npm/$PACKAGE_NAME/versions/$VERSION_ID" \
+                    -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" \
+                    -H "Accept: application/vnd.github.v3+json"
+              done
+          fi
