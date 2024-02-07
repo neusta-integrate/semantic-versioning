@@ -9,9 +9,12 @@ jobs:
   delete_package:
     runs-on: ubuntu-latest
     steps:
+      - name: Github context
+        run: echo "${{ toJson(github) }}"
+
       - name: Extract branch name
         id: branch_name
-        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+        run: echo "BRANCH=$(cat ${{ github.event_path }} | jq --raw-output '.ref')" >> $GITHUB_ENV
 
       - name: Delete package version associated with the deleted branch
         run: |
