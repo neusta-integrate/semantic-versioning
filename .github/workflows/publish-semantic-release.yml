@@ -2,10 +2,6 @@ name: Publish Semantic Release
 
 on:
   push:
-    branches:
-      - main
-      - develop
-      - stage
     paths-ignore:
       - "package.json"
       - ".github/workflows/**"
@@ -35,79 +31,51 @@ jobs:
 
       - name: Read the Current Version Number
         run: |
-          CURRENT_VERSION=$(jq -r '.version' package.json)
-          echo "Current version number: $CURRENT_VERSION"
-          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+          chmod +x ./.github/workflows/scripts/read-current-version.sh
+          ./.github/workflows/scripts/read-current-version.sh
 
       - name: Determine the New Version Number
         run: |
-          BRANCH_NAME=${GITHUB_REF#refs/heads/}
-          DATE_TIME=$(date +'%Y%m%d.%H%M')
-          NEW_VERSION=""
-          BASE_VERSION=$(echo $CURRENT_VERSION | sed -E 's/-dev.*|-rc.*//')
-
-          case $BRANCH_NAME in
-            "develop")
-              NEW_VERSION="$BASE_VERSION-dev.$DATE_TIME";;
-            "stage")
-              NEW_VERSION="$BASE_VERSION-rc.$DATE_TIME";;
-            "main")
-              NEW_VERSION=$(npx semantic-release --dry-run | grep 'next release version is' | sed 's/.*is //');;
-          esac
-
-          if [ -z "$NEW_VERSION" ] && [ "$BRANCH_NAME" = "main" ]; then
-            echo "::warning title=No Release::No relevant changes have been detected. The workflow will be terminated without publishing a new release."
-            exit 0
-          fi
-
-          echo "New version number: $NEW_VERSION"
-          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          chmod +x ./.github/workflows/scripts/determine-new-version.sh
+          ./.github/workflows/scripts/determine-new-version.sh
 
       - name: Commit Update Version
-        if: env.NEW_VERSION != '' && env.NEW_VERSION != env.CURRENT_VERSION
+        if: github.ref == 'refs/heads/main' && env.NEW_VERSION != '' && env.NEW_VERSION != env.CURRENT_VERSION
         run: |
-          jq '.version="'$NEW_VERSION'"' package.json > temp.json && mv temp.json package.json
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add package.json
-          git commit -m "chore: update version to $NEW_VERSION"
-          git push
-          echo "LAST_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
-          echo "IS_VERSION_UPDATE_COMMIT_COMLETED=true" >> $GITHUB_ENV
+          chmod +x ./.github/workflows/scripts/commit-update-version.sh
+          ./.github/workflows/scripts/commit-update-version.sh
 
       - name: Semantic Release
         if: github.ref == 'refs/heads/main' && env.NEW_VERSION != '' && success()
         run: |
-          npx semantic-release
-          echo "IS_SEMANTIC_RELEASE_COMLETED=true" >> $GITHUB_ENV
-          echo "::notice title=Semantic Release::Tag and release for version $NEW_VERSION have been created."
+          chmod +x ./.github/workflows/scripts/semantic-release.sh
+          ./.github/workflows/scripts/semantic-release.sh
+
+      - name: Delete existing package version
+        run: |
+          chmod +x ./.github/workflows/scripts/delete-package-version.sh
+          ./.github/workflows/scripts/delete-package-version.sh
 
       - name: Publish Package
         if: env.NEW_VERSION != '' && success()
         run: |
-          npm run publish-release
-          echo "IS_PUBLISH_COMLETED=true" >> $GITHUB_ENV
-          echo "::notice title=Publish Package::The release for version $NEW_VERSION has been published to GitHub Packages."
+          chmod +x ./.github/workflows/scripts/publish-package.sh
+          ./.github/workflows/scripts/publish-package.sh
 
       - name: Revert "Publish Package" on Failure
         if: env.NEW_VERSION != '' && failure() && env.IS_PUBLISH_COMLETED
         run: |
-          RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.NEW_VERSION }}" \
-            | jq -r '.id')
-          if [ "$RELEASE_ID" != "null" ]; then
-            curl -s -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              "https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID"
-          fi
+          chmod +x ./.github/workflows/scripts/revert-publish-package.sh
+          ./.github/workflows/scripts/revert-publish-package.sh
 
       - name: Revert "Semantic Release" on Failure
         if: github.ref == 'refs/heads/main' && env.NEW_VERSION != '' && failure() && env.IS_SEMANTIC_RELEASE_COMLETED
         run: |
-          git push --delete origin v${{ env.NEW_VERSION }}
-          git tag -d v${{ env.NEW_VERSION }}
+          chmod +x ./.github/workflows/scripts/revert-semantic-release.sh
+          ./.github/workflows/scripts/revert-semantic-release.sh
 
       - name: Revert "Commit update version" on Failure
-        if: env.NEW_VERSION != '' && failure() && env.IS_VERSION_UPDATE_COMMIT_COMLETED
+        if: env.NEW_VERSION != '' && failure() && env.IS_VERSION_UPDATE_COMMIT_COMPLETED
         run: |
-          git reset --hard ${{ env.LAST_COMMIT_SHA }}^
-          git push -f
+          chmod +x ./.github/workflows/scripts/revert-commit-update-version.sh
+          ./.github/workflows/scripts/revert-commit-update-version.sh
