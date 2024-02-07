@@ -21,7 +21,7 @@ jobs:
           ORGANIZATION="${{ github.repository_owner }}"
           PACKAGE_NAME="${{ github.event.repository.name }}"
           BRANCH_NAME="${{ env.BRANCH_NAME }}"
-          VERSION_TAG_PATTERN=".*-${BRANCH_NAME}$"
+          VERSION_TAG_PATTERN=".*\"$BRANCH_NAME\"$"
 
           echo "Searching package versions to delete for branch: $BRANCH_NAME"
 
