@@ -1,9 +1,6 @@
 
 #!/bin/bash
 
-# Updating the package.json with the new version
-jq '.version="'$NEW_VERSION'"' package.json > temp.json && mv temp.json package.json
-
 # Configuring git user details
 git config --local user.email "action@github.com"
 git config --local user.name "GitHub Action"

@@ -23,7 +23,7 @@ jobs:
           BRANCH_NAME="${{ env.BRANCH_NAME }}"
           VERSION_TAG_PATTERN=".*-${BRANCH_NAME}$"
 
-          echo "Searching for package versions to delete for branch: $BRANCH_NAME"
+          echo "Searching package versions to delete for branch: $BRANCH_NAME"
 
           PACKAGE_VERSIONS=$(curl -X GET "https://api.github.com/orgs/$ORGANIZATION/packages/npm/$PACKAGE_NAME/versions" \
             -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" \
