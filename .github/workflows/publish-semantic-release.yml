@@ -31,51 +31,51 @@ jobs:
 
       - name: Read the Current Version Number
         run: |
-          chmod +x ./scripts/read-current-version.sh
-          ./scripts/read-current-version.sh
+          chmod +x ./.github/workflows/scripts/read-current-version.sh
+          ./.github/workflows/scripts/read-current-version.sh
 
       - name: Determine the New Version Number
         run: |
-          chmod +x ./scripts/determine-new-version.sh
-          ./scripts/determine-new-version.sh
+          chmod +x ./.github/workflows/scripts/determine-new-version.sh
+          ./.github/workflows/scripts/determine-new-version.sh
 
       - name: Commit Update Version
         if: env.NEW_VERSION != '' && env.NEW_VERSION != env.CURRENT_VERSION
         run: |
-          chmod +x ./scripts/commit-update-version.sh
-          ./scripts/commit-update-version.sh
+          chmod +x ./.github/workflows/scripts/commit-update-version.sh
+          ./.github/workflows/scripts/commit-update-version.sh
 
       - name: Semantic Release
         if: github.ref == 'refs/heads/main' && env.NEW_VERSION != '' && success()
         run: |
-          chmod +x ./scripts/semantic-release.sh
-          ./scripts/semantic-release.sh
+          chmod +x ./.github/workflows/scripts/semantic-release.sh
+          ./.github/workflows/scripts/semantic-release.sh
 
       - name: Delete existing package version
         run: |
-          chmod +x ./scripts/delete-package-version.sh
-          ./scripts/delete-package-version.sh
+          chmod +x ./.github/workflows/scripts/delete-package-version.sh
+          ./.github/workflows/scripts/delete-package-version.sh
 
       - name: Publish Package
         if: env.NEW_VERSION != '' && success()
         run: |
-          chmod +x ./scripts/publish-package.sh
-          ./scripts/publish-package.sh
+          chmod +x ./.github/workflows/scripts/publish-package.sh
+          ./.github/workflows/scripts/publish-package.sh
 
       - name: Revert "Publish Package" on Failure
         if: env.NEW_VERSION != '' && failure() && env.IS_PUBLISH_COMLETED
         run: |
-          chmod +x ./scripts/revert-publish-package.sh
-          ./scripts/revert-publish-package.sh
+          chmod +x ./.github/workflows/scripts/revert-publish-package.sh
+          ./.github/workflows/scripts/revert-publish-package.sh
 
       - name: Revert "Semantic Release" on Failure
         if: github.ref == 'refs/heads/main' && env.NEW_VERSION != '' && failure() && env.IS_SEMANTIC_RELEASE_COMLETED
         run: |
-          chmod +x ./scripts/revert-semantic-release.sh
-          ./scripts/revert-semantic-release.sh
+          chmod +x ./.github/workflows/scripts/revert-semantic-release.sh
+          ./.github/workflows/scripts/revert-semantic-release.sh
 
       - name: Revert "Commit update version" on Failure
         if: env.NEW_VERSION != '' && failure() && env.IS_VERSION_UPDATE_COMMIT_COMPLETED
         run: |
-          chmod +x ./scripts/revert-commit-update-version.sh
-          ./scripts/revert-commit-update-version.sh
+          chmod +x ./.github/workflows/scripts/revert-commit-update-version.sh
+          ./.github/workflows/scripts/revert-commit-update-version.sh
