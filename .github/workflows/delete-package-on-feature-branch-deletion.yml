@@ -35,7 +35,7 @@ jobs:
           ORGANIZATION="${{ github.repository_owner }}"
           PACKAGE_NAME="${{ github.event.repository.name }}"
           BRANCH_NAME="${{ env.BRANCH_NAME }}"
-          VERSION_TAG_PATTERN=".*\"$BRANCH_NAME\"$"
+          VERSION_TAG_PATTERN=".*$BRANCH_NAME$"
 
           echo "Organization: $ORGANIZATION"
           echo "Package Name: $PACKAGE_NAME"
