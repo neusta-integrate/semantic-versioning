@@ -69,7 +69,7 @@ jobs:
           ./.github/workflows/scripts/revert-publish-package.sh
 
       - name: Revert "Semantic Release" on Failure
-        if: github.ref == 'refs/heads/main' && env.NEW_VERSION != '' && failure() && env.IS_SEMANTIC_RELEASE_COMLETED
+        if: github.ref == 'refs/heads/main' && env.NEW_VERSION != '' && failure() && env.IS_SEMANTIC_RELEASE_COMPLETED
         run: |
           chmod +x ./.github/workflows/scripts/revert-semantic-release.sh
           ./.github/workflows/scripts/revert-semantic-release.sh
