@@ -63,7 +63,7 @@ jobs:
           ./.github/workflows/scripts/publish-package.sh
 
       - name: Revert "Publish Package" on Failure
-        if: env.NEW_VERSION != '' && failure() && env.IS_PUBLISH_COMLETED
+        if: env.NEW_VERSION != '' && failure() && env.IS_PUBLISH_COMPLETED
         run: |
           chmod +x ./.github/workflows/scripts/revert-publish-package.sh
           ./.github/workflows/scripts/revert-publish-package.sh
