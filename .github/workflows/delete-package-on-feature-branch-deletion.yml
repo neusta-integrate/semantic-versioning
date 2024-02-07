@@ -12,30 +12,19 @@ jobs:
       - name: Github context
         run: echo "${{ toJson(github) }}"
 
-      # Debug-Log für den gesamten GitHub-Kontext
-      - name: Echo github event path
-        run: |
-          echo "GitHub Event Path: ${{ github.event_path }}"
-
-      # Debug-Log für den Branch-Namen
       - name: Extract branch name
         id: branch_name
         run: |
-          BRANCH_NAME=$(cat ${{ github.event_path }} | jq --raw-output '.ref')
-          echo "Extracted Branch Name: $BRANCH_NAME"
+          echo "BRANCH_NAME=$(cat ${{ github.event_path }} | jq --raw-output '.ref')" >> $GITHUB_ENV
+          echo "Extracted Branch Name: ${BRANCH_NAME}"
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-
-      # Bestätigung, dass der Branch-Name korrekt extrahiert wurde
-      - name: Confirm extracted branch name
-        run: |
-          echo "Confirmed Branch Name: ${{ env.BRANCH_NAME }}"
 
       - name: Delete package version associated with the deleted branch
         run: |
           ORGANIZATION="${{ github.repository_owner }}"
           PACKAGE_NAME="${{ github.event.repository.name }}"
           BRANCH_NAME="${{ env.BRANCH_NAME }}"
-          VERSION_TAG_PATTERN=".*$BRANCH_NAME$"
+          VERSION_TAG_PATTERN=".*\"$BRANCH_NAME\"$"
 
           echo "Organization: $ORGANIZATION"
           echo "Package Name: $PACKAGE_NAME"
@@ -47,8 +36,6 @@ jobs:
           PACKAGE_INFO=$(curl -X GET "https://api.github.com/orgs/$ORGANIZATION/packages/npm/$PACKAGE_NAME/versions" \
             -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json")
-
-          echo "Package Info: $PACKAGE_INFO"
 
           VERSION_IDS=$(echo "$PACKAGE_INFO" | jq -r --arg VERSION_TAG_PATTERN "$VERSION_TAG_PATTERN" '.[] | select(.name | test($VERSION_TAG_PATTERN)) | .id')
 
