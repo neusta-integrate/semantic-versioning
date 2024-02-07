@@ -24,8 +24,7 @@ case $BRANCH_NAME in
         # For main branch, use semantic-release to determine the next version
         NEW_VERSION=$(npx semantic-release --dry-run | grep 'next release version is' | sed 's/.*is //');;
     *)
-        PR_BRANCH=$(echo ${GITHUB_HEAD_REF} | sed 's/[^a-zA-Z0-9]/-/g')
-        NEW_VERSION="$BASE_VERSION-$PR_BRANCH"
+        NEW_VERSION="$BASE_VERSION-$BRANCH_NAME"
 esac
 
 # Check if a new version has been determined; if not, exit with a warning
