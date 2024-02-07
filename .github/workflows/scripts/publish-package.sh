@@ -11,4 +11,5 @@ if [ $? -eq 0 ]; then
 else
     echo "IS_PUBLISH_COMPLETED=false" >> $GITHUB_ENV
     echo "::error title=Publish Package::Failed to publish the release for version $NEW_VERSION."
+    exit 1
 fi
