@@ -39,6 +39,12 @@ jobs:
           chmod +x ./.github/workflows/scripts/determine-new-version.sh
           ./.github/workflows/scripts/determine-new-version.sh
 
+      - name: Update Version in package.json
+        if: env.NEW_VERSION != '' && env.NEW_VERSION != env.CURRENT_VERSION
+        run: |
+          chmod +x ./.github/workflows/scripts/update-version-in-package-json.sh
+          ./.github/workflows/scripts/update-version-in-package-json.sh
+
       - name: Commit Update Version
         if: github.ref == 'refs/heads/main' && env.NEW_VERSION != '' && env.NEW_VERSION != env.CURRENT_VERSION
         run: |
