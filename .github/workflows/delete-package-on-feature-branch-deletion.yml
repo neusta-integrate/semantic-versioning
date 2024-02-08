@@ -10,12 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Github context
-        run: echo "${{ toJson(github) }}"
+        run: |
+          echo '${{ toJson(github) }}' > github_context.json
+          cat github_context.json
 
       - name: Extract branch name
         id: branch_name
         run: |
-          echo "BRANCH_NAME=$(cat ${{ toJson(github) }} | jq --raw-output '.event.ref')" >> $GITHUB_ENV
+          BRANCH_NAME=$(cat github_context.json | jq --raw-output '.event.ref')
           echo "Extracted Branch Name: ${BRANCH_NAME}"
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
 
