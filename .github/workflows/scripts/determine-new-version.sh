@@ -10,7 +10,7 @@ echo "Current version number: $CURRENT_VERSION"
 NEW_VERSION=""
 
 # Remove any pre-release identifiers from the current version
-BASE_VERSION=$(echo $CURRENT_VERSION | sed -E 's/(-[^.]+.*)?$//' | sed 's/\//./g')
+BASE_VERSION=$(echo $CURRENT_VERSION | sed -E 's/(-[^.]+.*)?$//')
 
 # Check if this run is triggered by a pull request
 BRANCH_NAME=${GITHUB_REF#refs/heads/}
@@ -24,7 +24,8 @@ case $BRANCH_NAME in
         # For main branch, use semantic-release to determine the next version
         NEW_VERSION=$(npx semantic-release --dry-run | grep 'next release version is' | sed 's/.*is //');;
     *)
-        NEW_VERSION="$BASE_VERSION-$BRANCH_NAME"
+        BRANCH_NAME_MODIFIED=$(echo $BRANCH_NAME | sed 's/\//./g')
+        NEW_VERSION="$BASE_VERSION-$BRANCH_NAME_MODIFIED"
 esac
 
 # Check if a new version has been determined; if not, exit with a warning

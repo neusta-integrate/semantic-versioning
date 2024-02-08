@@ -5,12 +5,12 @@ const sourceDir = path.join(process.cwd(), './.github/workflows');
 const targetDir = path.join(process.env.INIT_CWD, './.github/workflows');
 
 function copyRecursively(srcDir, tgtDir) {
-  // Ensure target directory exists
+  // Ensure the target directory exists
   if (!fs.existsSync(tgtDir)) {
     fs.mkdirSync(tgtDir, { recursive: true });
   }
 
-  // Read contents of the current directory
+  // Read the contents of the current directory
   fs.readdirSync(srcDir).forEach((item) => {
     const srcItem = path.join(srcDir, item);
     const tgtItem = path.join(tgtDir, item);
