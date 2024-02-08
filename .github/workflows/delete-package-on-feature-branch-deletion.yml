@@ -26,20 +26,14 @@ jobs:
           ORGANIZATION="${{ github.repository_owner }}"
           PACKAGE_NAME="${{ github.event.repository.name }}"
           BRANCH_NAME=$(echo "${{ env.BRANCH_NAME }}" | sed 's/\//./g')
-          VERSION_TAG_PATTERN=".*\"$BRANCH_NAME\"$"
-
-          echo "Organization: $ORGANIZATION"
-          echo "Package Name: $PACKAGE_NAME"
-          echo "Branch Name: $BRANCH_NAME"
+          VERSION_TAG_PATTERN=".*-$BRANCH_NAME$"
+          
           echo "Version Tag Pattern: $VERSION_TAG_PATTERN"
-
           echo "Searching package versions to delete for branch: $BRANCH_NAME"
 
           PACKAGE_INFO=$(curl -X GET "https://api.github.com/orgs/$ORGANIZATION/packages/npm/$PACKAGE_NAME/versions" \
             -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json")
-          echo "Package Info Response:"
-          echo "$PACKAGE_INFO"
 
           VERSION_IDS=$(echo "$PACKAGE_INFO" | jq -r --arg VERSION_TAG_PATTERN "$VERSION_TAG_PATTERN" '.[] | select(.name | test($VERSION_TAG_PATTERN)) | .id')
 
