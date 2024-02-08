@@ -10,7 +10,7 @@ echo "Current version number: $CURRENT_VERSION"
 NEW_VERSION=""
 
 # Remove any pre-release identifiers from the current version
-BASE_VERSION=$(echo $CURRENT_VERSION | sed -E 's/(-[^.]+.*)?$//')
+BASE_VERSION=$(echo $CURRENT_VERSION | sed -E 's/(-[^.]+.*)?$//' | sed 's/\//./g')
 
 # Check if this run is triggered by a pull request
 BRANCH_NAME=${GITHUB_REF#refs/heads/}
