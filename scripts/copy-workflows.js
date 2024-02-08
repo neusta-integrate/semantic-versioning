@@ -4,16 +4,24 @@ const path = require('path');
 const sourceDir = path.join(process.cwd(), './.github/workflows');
 const targetDir = path.join(process.env.INIT_CWD, './.github/workflows');
 
-// Ensure target .github/workflows directory exists
-if (!fs.existsSync(targetDir)) {
-  fs.mkdirSync(targetDir, { recursive: true });
+function copyRecursively(srcDir, tgtDir) {
+  // Ensure the target directory exists
+  if (!fs.existsSync(tgtDir)) {
+    fs.mkdirSync(tgtDir, { recursive: true });
+  }
+
+  // Read the contents of the current directory
+  fs.readdirSync(srcDir).forEach((item) => {
+    const srcItem = path.join(srcDir, item);
+    const tgtItem = path.join(tgtDir, item);
+    const itemStats = fs.statSync(srcItem);
+
+    if (itemStats.isFile()) {
+      fs.copyFileSync(srcItem, tgtItem);
+    } else if (itemStats.isDirectory()) {
+      copyRecursively(srcItem, tgtItem);
+    }
+  });
 }
 
-// Copy all files in the source directory
-fs.readdirSync(sourceDir).forEach((file) => {
-  const sourceFile = path.join(sourceDir, file);
-  const targetFile = path.join(targetDir, file);
-
-  // Copy each file from the source to the target directory
-  fs.copyFileSync(sourceFile, targetFile);
-});
+copyRecursively(sourceDir, targetDir);
