@@ -4,6 +4,9 @@
 ORGANISATION=$ORGANISATION
 PACKAGE_NAME=$(echo "$PACKAGE_NAME" | cut -d'/' -f2)
 VERSION_TO_DELETE="$NEW_VERSION"
+echo "Organisation: $ORGANISATION"
+echo "Package Name: $PACKAGE_NAME"
+echo "Version to delete: $VERSION_TO_DELETE"
 
 # Fetch package versions
 PACKAGE_INFO=$(curl -X GET "https://api.github.com/orgs/$ORGANISATION/packages/npm/$PACKAGE_NAME/versions"   -H "Authorization: bearer ${GH_TOKEN}"   -H "Accept: application/vnd.github.v3+json")
