@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Define variables
-ORGANISATION=${github.repository_owner}
-PACKAGE_NAME=$(echo "${{ github.event.repository }}" | cut -d'/' -f2)
+ORGANISATION=$ORGANISATION
+PACKAGE_NAME=$(echo "$PACKAGE_NAME" | cut -d'/' -f2)
 VERSION_TO_DELETE="$NEW_VERSION"
 
 # Fetch package versions
