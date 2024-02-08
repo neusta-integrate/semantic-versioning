@@ -17,7 +17,7 @@ jobs:
       - name: Extract branch name
         id: branch_name
         run: |
-          BRANCH_NAME=$(cat github_context.json | jq --raw-output '.event.ref')
+          BRANCH_NAME=$(cat github_context.json | jq --raw-output '.event.ref' | sed 's/\//./g')
           echo "Extracted Branch Name: ${BRANCH_NAME}"
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
 
@@ -38,6 +38,8 @@ jobs:
           PACKAGE_INFO=$(curl -X GET "https://api.github.com/orgs/$ORGANIZATION/packages/npm/$PACKAGE_NAME/versions" \
             -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json")
+          echo "Package Info Response:"
+          echo "$PACKAGE_INFO"
 
           VERSION_IDS=$(echo "$PACKAGE_INFO" | jq -r --arg VERSION_TAG_PATTERN "$VERSION_TAG_PATTERN" '.[] | select(.name | test($VERSION_TAG_PATTERN)) | .id')
 
