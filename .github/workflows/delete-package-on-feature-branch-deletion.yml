@@ -17,7 +17,7 @@ jobs:
       - name: Extract branch name
         id: branch_name
         run: |
-          BRANCH_NAME=$(cat github_context.json | jq --raw-output '.ref' | sed 's/refs\/heads\///')
+          BRANCH_NAME=$(cat github_context.json | jq --raw-output '.event.ref')
           echo "Extracted Branch Name: ${BRANCH_NAME}"
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
 
