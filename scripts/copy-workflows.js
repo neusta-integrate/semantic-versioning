@@ -17,14 +17,11 @@ function copyRecursively(srcDir, tgtDir) {
     const itemStats = fs.statSync(srcItem);
 
     if (itemStats.isFile()) {
-      // Copy the file if the item is a file
       fs.copyFileSync(srcItem, tgtItem);
     } else if (itemStats.isDirectory()) {
-      // Recursive call if the item is a directory
       copyRecursively(srcItem, tgtItem);
     }
   });
 }
 
-// Start the copy process
 copyRecursively(sourceDir, targetDir);
