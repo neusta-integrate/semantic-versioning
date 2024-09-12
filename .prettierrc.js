@@ -1,4 +1,4 @@
-const basePrettierConfigFormatterJavascript = require("@open4business/formatter-javascript/config/prettierConfig");
+const basePrettierConfigFormatterJavascript = require('@neusta-integrate/formatter-javascript/config/prettierConfig');
 
 module.exports = {
   overrides: [

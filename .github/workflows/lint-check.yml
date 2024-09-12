@@ -34,16 +34,16 @@ jobs:
         if: env.RUN_LINT == 'true'
         run: rm -f package-lock.json
 
-      - name: Update packages to use latest "@open4business/formatter-..."
+      - name: Update packages to use latest "@neusta-integrate/formatter-..."
         if: env.RUN_LINT == 'true'
         run: |
           jq '(
             if .dependencies then .dependencies |= with_entries(
-              if .key | test("@open4business/formatter-") then .value = "latest" else . end
+              if .key | test("@neusta-integrate/formatter-") then .value = "latest" else . end
             ) else . end
           ) | (
             if .devDependencies then .devDependencies |= with_entries(
-              if .key | test("@open4business/formatter-") then .value = "latest" else . end
+              if .key | test("@neusta-integrate/formatter-") then .value = "latest" else . end
             ) else . end
           )' package.json > temp.json && mv temp.json package.json
 
