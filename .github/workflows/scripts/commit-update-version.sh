@@ -5,7 +5,7 @@
 git config --local user.email "action@github.com"
 git config --local user.name "GitHub Action"
 
-# Adding and committing the updated package.json
+# Adding and committing updated package.json
 git add package.json
 git commit -m "chore: update version to $NEW_VERSION"
 
