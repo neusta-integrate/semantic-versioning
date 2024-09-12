@@ -1,8 +1,8 @@
-/node_modules
-/dist
-/storybook-static
-/coverage
-!/.storybook
-!/.scripts
-/loader
-/package
+/.scripts/
+/.storybook/
+coverage/
+dist/
+loader/
+node_modules/
+package/
+storybook-static/
