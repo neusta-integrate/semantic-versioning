@@ -1,1 +1,1 @@
-module.exports = { extends: ['@open4business/commit-rules'] };
+module.exports = { extends: ['@neusta-integrate/commit-rules'] };
