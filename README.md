@@ -68,5 +68,5 @@ Use `@neusta-integrate/commit-rules` to ensure that your commit messages follow 
 
 ## Support and Contributions
 
-- **Getting Help:** For support, questions, or feedback, please file an issue on our [GitHub repository](https://github.com/open4business/semantic-versioning).
+- **Getting Help:** For support, questions, or feedback, please file an issue on our [GitHub repository](https://github.com/neusta-integrate/semantic-versioning).
 - **Contributing:** Contributions are welcome! If you'd like to contribute, please fork the repository and submit a pull request.
